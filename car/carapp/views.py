@@ -196,6 +196,12 @@ def staffregister(request):
 def staffhome(request):
     return render(request,'staffhome.html')
 
+def visit(request):
+    return render(request,'visit.html')
+
+def job(request):
+    return render(request,'job.html')
+
 # def signup(request):
 #     if request.method == 'POST':
 #         role=request.POST['role']
