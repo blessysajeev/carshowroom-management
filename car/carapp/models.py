@@ -45,9 +45,9 @@ class Vehicles(models.Model):
     def _str_(self):
         return '{}'.format(self.name)
 
+
 class test_drive(models.Model):
    
-    
     username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="name")
     venue = models.CharField(max_length=100,null=True)
     carmodel = models.CharField(max_length=100,null=True)
@@ -65,7 +65,23 @@ class test_drive(models.Model):
     def _str_(self):
         return '{}'.format(self.carmodel)
     def __str__(self):
-        return self.username.username
+        return self.username.username   
+
+
+class staff(models.Model):
+    username = models.CharField(max_length=100,unique=True)
+    phone = models.CharField(max_length=15,unique=True,null=True)
+    email = models.EmailField(max_length=100, unique=True)
+    password = models.CharField(max_length=250)
+    
+    class Meta:
+        ordering=('username',)
+        verbose_name='staff'
+        verbose_name_plural='staffs'
+
+    def _str_(self):
+        return '{}'.format(self.username)
+
 
 # class MyAccountManager(BaseUserManager):
 #     def create_user(self,username,phonenumber,email,password=None):

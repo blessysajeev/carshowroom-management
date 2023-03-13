@@ -17,10 +17,12 @@ urlpatterns = [
     path('logout/',views.logout, name='logout'),
     # path('home/',views.home,name='home'),
     path('testdrive/',views.testdrive,name='testdrive'),
-    # path('cars/',views.Cars,name='cars'),
-    # path('singleCar/<int:id>',views.singleCar,name="singleCar"),
-    # path('testview/' , views.testview,name='testview'),
-    # path('delete/<int:id>',views.delete,name='delete'),
+    path('cars/',views.cars,name='cars'),
+    path('testview/' , views.testview,name='testview'),
+    path('delete/<int:id>',views.delete,name='delete'),
+    path('staffhome',views.staffhome,name='staffhome'),
+    path('stafflogin',views.stafflogin,name="stafflogin"),
+    path('staffregister',views.staffregister,name="staffregister"),
     # path('book/<int:id>',views.book,name='book'),
 
 

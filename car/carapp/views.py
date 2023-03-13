@@ -26,7 +26,8 @@ def contact(request):
 def register(request):
     if request.method=='POST':
         username=request.POST['username']
-        email=request.POST['email']      
+        email=request.POST['email'] 
+        phone=request.POST['phone']     
         password=request.POST['password']
         cpassword=request.POST['cpassword']
         if password==cpassword:   
@@ -39,7 +40,7 @@ def register(request):
             else:
                 user=User.objects.create_user(username=username,email=email,password=password)
                 user.save();
-                u=customer(username=username,email=email,password=password)
+                u=customer(username=username,email=email,phone=phone,password=password)
                 u.save();
             print("User Created");
             messages.success(request,"successfully registered")
@@ -129,6 +130,71 @@ def testdrive(request):
         messages.success(request, "book appoinment successfully.")
     return render(request,'testdrive.html',context)
 
+def testview(request):
+    obj=test_drive.objects.all()
+    # context={'info':obj}
+    return render(request,'testview.html',{'obj':obj})
+
+def delete(request,id):
+    appoimnt_info=test_drive.objects.get(id=id)
+    appoimnt_info.delete()
+    return redirect('testview')
+
+def cars(request):
+    return render(request,'cars.html')
+
+def stafflogin(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['password']
+        user=authenticate(username=username,password=password)
+    
+
+        if user:
+            print(2)
+            auth.login(request,user)
+            #save email in session
+            request.session['username'] = username
+            
+
+            return redirect('staffhome')
+        else:
+            # print(3)
+            messages.info(request,"invalid values")
+            return redirect('stafflogin')
+    return render(request,'stafflogin.html')
+
+
+
+def staffregister(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        email=request.POST['email'] 
+        phone=request.POST['phone']     
+        password=request.POST['password']
+        cpassword=request.POST['cpassword']
+        if password==cpassword:   
+            if User.objects.filter(username=username).exists():
+                messages.info(request,"Username Already Exists")
+                return redirect('stafflogin') 
+            elif User.objects.filter(email=email).exists():
+                messages.info(request,"Email Already Exists")
+                return redirect('stafflogin') 
+            else:
+                user=User.objects.create_user(username=username,email=email,password=password)
+                user.save();
+                u=staff(username=username,email=email,phone=phone,password=password)
+                u.save();
+            print("User Created");
+            messages.success(request,"successfully registered")
+            return redirect('stafflogin')
+        else:
+            messages.info(request,"password not match")
+            return redirect('stafflogin')
+    return render(request, 'stafflogin.html')
+
+def staffhome(request):
+    return render(request,'staffhome.html')
 
 # def signup(request):
 #     if request.method == 'POST':

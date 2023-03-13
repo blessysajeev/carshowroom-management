@@ -64,7 +64,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'login' %}">as customer</a></li>
-                  <li><a href="{% url 'stafflogin' %}">as staff</a></li>
+                  <li><a href="#">as staff</a></li>
                   <!-- <li><a href="#">Change Password</a></li> -->
                   <!-- <li class="divider"></li> -->
                   <!-- <li><a href="#">Logout</a></li> -->
@@ -110,7 +110,7 @@
 	<!-- end slider -->
  
 	</section>
-	<section>
+	<!-- <section>
         
 	<div class="container">
         
@@ -120,15 +120,14 @@
 
             <div class="col-md-4 md-margin-bottom-40">
                 
-                <img class="img-responsive" src="{{i.image1.url}}" alt="" style="height: 250px;">   
+                <img class="img-responsive" src="{{i.image1.url}}" alt="">   
                 <span> <h2>{{i.name}}</h2>
                  <p>{{i.description}}</p>  
-                 {% if request.session.username %}
-                 <a href="{% url 'cars' %}" class="btn more">More</a>	</span>	
-                 {% endif %}                           
+                 <a href="#" class="btn more">More</a>	</span>	
+                                             
              </div>
 
-            {% endfor %}
+            {% endfor %} -->
             
             <!-- <div class="col-md-4">
                 <img class="img-responsive" src="{% static 'img/service2.jpg' %}" alt="">            
@@ -148,11 +147,11 @@
                 <p>Car painting does not only involves the process of coloring the vehicle. The process of coloring is also followed with coating the car with necessary materials so that the color should remain for a longer period of time.</p>      
  <a href="#" class="btn more">More</a>	</span>					
             </div> -->
-        </div>
+        <!-- </div>
        
 	</div>
     
-	</section>
+	</section> -->
 	<section class="callaction">
 	<div class="container">
 		<div class="row">
@@ -168,6 +167,8 @@
 	</div>
 	</section>
 	<section id="content">
+	
+	
 	<div class="container">
 		
 	     <div class="row">
@@ -176,7 +177,13 @@
 								<div class="block-heading-two">
 									<h3><span>Why Choose Us?</span></h3>
 								</div>
-								<p>We provide the best car servives in town.We have highly qualified employees for all types of car services.And we also provide door step car services</p> 
+								<p>We provide the best car servives in town.We have highly qualified employees for all types of car services.And we also provide door step car services</p>
+								
+								
+						  
+					
+					
+							
 			</div>
 		</div>
 	</div>
