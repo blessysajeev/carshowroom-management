@@ -1,4 +1,8 @@
 from django.db import models 
+
+
+
+
 # from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,PermissionsMixin
 # Create your models here.
 
@@ -24,15 +28,14 @@ class Vehicles(models.Model):
     fueltype=models.TextField(blank=True)
     fuelfuelcapacity=models.CharField(max_length=200,blank=True)
     fueltype=models.TextField(blank=True)
-    # category=models.ForeignKey(Category,on_delete=models.CASCADE)
-    # subcategory=models.ForeignKey(Subcategory,on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='product',blank=True)
     image1=models.ImageField(upload_to='product',blank=True)
     image2=models.ImageField(upload_to='product',blank=True)
     image3=models.ImageField(upload_to='product',blank=True)
     image4=models.ImageField(upload_to='product',blank=True)
     image5=models.ImageField(upload_to='product',blank=True)
     image6=models.ImageField(upload_to='product',blank=True)
-    #stock=models.CharField(max_length=250,default="null")
+    # stock=models.CharField(max_length=250,default="null")
     available=models.BooleanField(default=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
@@ -81,6 +84,8 @@ class staff(models.Model):
 
     def _str_(self):
         return '{}'.format(self.username)
+
+
 
 
 # class MyAccountManager(BaseUserManager):

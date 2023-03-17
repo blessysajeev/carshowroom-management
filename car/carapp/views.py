@@ -140,8 +140,13 @@ def delete(request,id):
     appoimnt_info.delete()
     return redirect('testview')
 
-def cars(request):
-    return render(request,'cars.html')
+def cars(request,id):
+    print(id)
+    lst=Vehicles.objects.filter(id=id)
+    context={
+        'lst':lst
+    }
+    return render(request,'cars.html',context)
 
 def stafflogin(request):
     if request.method=='POST':
@@ -197,7 +202,34 @@ def staffhome(request):
     return render(request,'staffhome.html')
 
 def visit(request):
-    return render(request,'visit.html')
+    obj={}
+    obj=Vehicles.objects.all()
+    context={'result':obj}
+    if request.method=='POST':
+        
+        username=request.session['username']
+        user=staff.objects.filter(username=username)
+        
+        for i in user:
+            id=i.id
+            print(id)
+        
+        venue=request.POST['venue']
+        carmodel=request.POST['carmodel']  
+        Contact=request.POST['Contact']  
+        Email=request.POST['Email']  
+        testdate=request.POST['testdate']
+        testtime=request.POST['testtime']
+        # print(username,user,venue,carmodel,Contact,Email,testdate,testtime)
+        # print('userid',id)
+        # print(Contact)
+        
+        test=test_drive(username_id=id,venue=venue,carmodel=carmodel,testdate=testdate,testtime=testtime,Contact=Contact,Email=Email)
+        # num=customer(Contact=Contact)
+        # num.save()
+        test.save()
+        messages.success(request, "book appoinment successfully.")
+    return render(request,'visit.html',context)
 
 def job(request):
     return render(request,'job.html')

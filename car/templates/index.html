@@ -124,7 +124,7 @@
                 <span> <h2>{{i.name}}</h2>
                  <p>{{i.description}}</p>  
                  {% if request.session.username %}
-                 <a href="{% url 'cars' %}" class="btn more">More</a>	</span>	
+                 <a href="{% url 'cars' i.id %}" class="btn more">More</a>	</span>	
                  {% endif %}                           
              </div>
 
