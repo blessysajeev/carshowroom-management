@@ -23,7 +23,7 @@ urlpatterns = [
     path('staffhome',views.staffhome,name='staffhome'),
     path('stafflogin',views.stafflogin,name="stafflogin"),
     path('staffregister',views.staffregister,name="staffregister"),
-    path('visit',views.visit,name="visit"),
+    path('showroomvisit',views.showroomvisit,name="showroomvisit"),
     path('job',views.job,name="job"),
     # path('book/<int:id>',views.book,name='book'),
 

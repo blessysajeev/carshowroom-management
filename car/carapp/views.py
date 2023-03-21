@@ -132,12 +132,13 @@ def testdrive(request):
 
 def testview(request):
     obj=test_drive.objects.all()
+    obje=showroom_visit.objects.all()
     # context={'info':obj}
-    return render(request,'testview.html',{'obj':obj})
+    return render(request,'testview.html',{'obj':obj,'obje':obje})
 
 def delete(request,id):
     appoimnt_info=test_drive.objects.get(id=id)
-    appoimnt_info.delete()
+    appoimnt_info.delete() 
     return redirect('testview')
 
 def cars(request,id):
@@ -201,38 +202,46 @@ def staffregister(request):
 def staffhome(request):
     return render(request,'staffhome.html')
 
-def visit(request):
+def showroomvisit(request):
     obj={}
     obj=Vehicles.objects.all()
     context={'result':obj}
     if request.method=='POST':
         
         username=request.session['username']
-        user=staff.objects.filter(username=username)
+        user=customer.objects.filter(username=username)
         
         for i in user:
             id=i.id
             print(id)
         
-        venue=request.POST['venue']
+        
         carmodel=request.POST['carmodel']  
         Contact=request.POST['Contact']  
         Email=request.POST['Email']  
-        testdate=request.POST['testdate']
-        testtime=request.POST['testtime']
+        visitdate=request.POST['visitdate']
+        visittime=request.POST['visittime']
         # print(username,user,venue,carmodel,Contact,Email,testdate,testtime)
         # print('userid',id)
         # print(Contact)
         
-        test=test_drive(username_id=id,venue=venue,carmodel=carmodel,testdate=testdate,testtime=testtime,Contact=Contact,Email=Email)
+        visit=showroom_visit(username_id=id,carmodel=carmodel,visitdate=visitdate,visittime=visittime,Contact=Contact,Email=Email)
         # num=customer(Contact=Contact)
         # num.save()
-        test.save()
+        visit.save()
         messages.success(request, "book appoinment successfully.")
     return render(request,'visit.html',context)
 
+def visit_delete(request,id):
+    visit_info=showroom_visit.objects.get(id=id)
+    visit_info.delete() 
+    return redirect('testview')
+
 def job(request):
     return render(request,'job.html')
+
+def appoinmentview(request):
+    return render(request,'appoinmentview.html')
 
 # def signup(request):
 #     if request.method == 'POST':

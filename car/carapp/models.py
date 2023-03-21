@@ -51,7 +51,7 @@ class Vehicles(models.Model):
 
 class test_drive(models.Model):
    
-    username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="name")
+    username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="customername")
     venue = models.CharField(max_length=100,null=True)
     carmodel = models.CharField(max_length=100,null=True)
     Contact = models.BigIntegerField(default=0)
@@ -69,6 +69,28 @@ class test_drive(models.Model):
         return '{}'.format(self.carmodel)
     def __str__(self):
         return self.username.username   
+
+
+class showroom_visit(models.Model):
+   
+    username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="visitername")
+    carmodel = models.CharField(max_length=100,null=True)
+    Contact = models.BigIntegerField(default=0)
+    Email = models.EmailField(max_length=100,null=True)
+    visitdate = models.DateField(null=True, auto_now_add=False)
+    visittime = models.TimeField(null=True, blank=True)
+
+
+    class Meta:
+        ordering=('carmodel',)
+        verbose_name='showroom_visit'
+        verbose_name_plural='showroom_visit'
+
+    def _str_(self):
+        return '{}'.format(self.carmodel)
+    def __str__(self):
+        return self.username.username   
+
 
 
 class staff(models.Model):
