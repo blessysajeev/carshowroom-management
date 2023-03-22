@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from decimal import Decimal
 
 # Create your views here.
 
@@ -242,6 +243,23 @@ def job(request):
 
 def appoinmentview(request):
     return render(request,'appoinmentview.html')
+
+from django.shortcuts import render
+
+def calculate_emi(request):
+    if request.method == 'POST':
+        loan_amount = float(request.POST.get('loan_amount'))
+        interest_rate = float(request.POST.get('interest_rate'))
+        loan_tenure = int(request.POST.get('loan_tenure'))
+        r = (interest_rate / 12) / 100
+        n = loan_tenure * 12
+        emi = (loan_amount * r * ((1 + r) ** n)) / (((1 + r) ** n) - 1)
+        emi = round(emi, 2)
+        context = {'emi': emi}
+    else:
+        context = {}
+    return render(request, 'calculate_emi.html', context)
+
 
 # def signup(request):
 #     if request.method == 'POST':

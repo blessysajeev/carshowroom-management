@@ -1,8 +1,19 @@
 {% load static %}
 
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view</title>
+</head>
+<body>
     <body>
+        <div>
+            <a href="{% url 'index' %}" class="nav-link"><b>BACK</b></a>
+         </div>
 <div class="container">
     {% for msg in messages %}
 <div class="alert alert-warning" role="alert">
@@ -83,7 +94,7 @@
            <td><span class="badge text-bg-dark">{{j.visittime}}</span></td>
            <td>
                 <!-- <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>  -->
-               <a href="/delete/{{j.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
+               <a href="/visit_delete/{{j.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
               <!-- <button type="button" class="btn btn-warning btn-sm">Edit</button> -->
               <!-- <button type="button" class="btn btn-danger btn-sm">Delete</button> -->
               <!-- <form action="" method="post" class="d-inline"> -->
@@ -102,7 +113,7 @@
     {% else %}
     <h4 class="text-center alert alert-warning">No records</h4>
     {% endif %} 
- </center>
-
+ </center>  
 </body>
 </html>
+    

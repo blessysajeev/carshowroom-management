@@ -25,6 +25,8 @@ urlpatterns = [
     path('staffregister',views.staffregister,name="staffregister"),
     path('showroomvisit',views.showroomvisit,name="showroomvisit"),
     path('job',views.job,name="job"),
+    path('visit_delete/<int:id>',views.visit_delete,name='visit_delete'),
+    path('calculate_emi', views.calculate_emi, name='calculate_emi'),
     # path('book/<int:id>',views.book,name='book'),
 
 

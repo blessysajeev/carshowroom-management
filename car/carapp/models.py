@@ -35,6 +35,7 @@ class Vehicles(models.Model):
     image4=models.ImageField(upload_to='product',blank=True)
     image5=models.ImageField(upload_to='product',blank=True)
     image6=models.ImageField(upload_to='product',blank=True)
+    brochure=models.FileField(upload_to='product',blank=True)
     # stock=models.CharField(max_length=250,default="null")
     available=models.BooleanField(default=True)
     created=models.DateTimeField(auto_now_add=True)
