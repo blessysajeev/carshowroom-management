@@ -110,7 +110,25 @@ class staff(models.Model):
 
 
 
+class car(models.Model):
+    name = models.CharField(max_length=50)
+    company = models.CharField(max_length=50)
+    year = models.IntegerField()
+    kms_driven = models.IntegerField()
+    fuel_type = models.CharField(max_length=50)
 
+class Bank(models.Model):
+    name = models.CharField(max_length=255)
+    interest_rate = models.FloatField()
+
+class CarLoan(models.Model):
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
+    loan_amount = models.FloatField()
+    loan_tenure = models.IntegerField()
+    interest_rate = models.FloatField()
+    emi_amount = models.FloatField()
+
+    
 # class MyAccountManager(BaseUserManager):
 #     def create_user(self,username,phonenumber,email,password=None):
         

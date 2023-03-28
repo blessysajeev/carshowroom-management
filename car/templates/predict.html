@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Car Data Analysis</title>
+</head>
+<body>
+	<!-- <h1>Car Data Analysis</h1> -->
+	
+	<!-- <h2>Price Distribution by Company</h2>
+	<img src="{% static 'company_price_boxplot.png' %}">
+	
+	<h2>Price Distribution by Year</h2>
+	<img src="{% static 'year_price_swarmplot.png' %}">
+	
+	<h2>Price vs Kms Driven</h2>
+	<img src="{% static 'kms_price_scatterplot.png' %}">
+	
+	<h2>Price Distribution by Fuel Type</h2>
+	<img src="{% static 'fuel_type_price_boxplot.png' %}">
+	
+	<h2>Price vs Company (Grouped by Fuel Type and Year)</h2>
+	<img src="{% static 'company_fueltype_year_price_scatterplot.png' %}"> -->
+	
+	<!-- <h2>Linear Regression Model</h2> -->
+	<p>Enter car details to predict its price:</p>
+	<form method="POST" action="{% url 'predict_price' %}">
+		{% csrf_token %}
+		<label for="name">Car Name:</label>
+		<input type="text" name="name"><br>
+		<label for="company">Company:</label>
+		<input type="text" name="company"><br>
+		<label for="year">Year:</label>
+		<input type="number" name="year"><br>
+		<label for="kms_driven">Kms Driven:</label>
+		<input type="number" name="kms_driven"><br>
+		<label for="fuel_type">Fuel Type:</label>
+		<input type="text" name="fuel_type"><br>
+		<input type="submit" value="Predict Price">
+	</form>
+	{% if prediction %}
+	<p>Predicted price: {{ prediction }}</p>
+	{% endif %}
+	
+</body>
+</html>

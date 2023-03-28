@@ -1,7 +1,7 @@
 from django.contrib import admin
 from email.headerregistry import Group
 from django.contrib import admin
-from.models import Vehicles,customer,staff
+from.models import Vehicles,customer,staff,Bank
 from django.contrib.auth.models import Group,User
 
 # Register your models here.
@@ -41,6 +41,13 @@ class staffAdmin(admin.ModelAdmin):
 
     verbose_name_plural = "Staff Details"
 admin.site.register(staff,staffAdmin)
+
+class BankAdmin(admin.ModelAdmin):
+     list_display=['name','interest_rate']
+     
+    # prepopulated_fields={'slug':('name',)}
+admin.site.register(Bank,BankAdmin)
+
 
 # class staffloginAdmin(admin.ModelAdmin):
 #     list_display=['username']

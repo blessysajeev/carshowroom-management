@@ -4,8 +4,16 @@ from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from decimal import Decimal
+from django.http import HttpResponse
+from sklearn.preprocessing import LabelEncoder
+import pickle
+import pandas as pd
+import numpy as np
+from django.http import JsonResponse
 
 # Create your views here.
+
+
 
 def index(request): 
     obj=Vehicles.objects.all()
@@ -244,21 +252,71 @@ def job(request):
 def appoinmentview(request):
     return render(request,'appoinmentview.html')
 
-from django.shortcuts import render
 
-def calculate_emi(request):
+
+def car_loan_emi(request):
+    banks = Bank.objects.all()
     if request.method == 'POST':
+        bank_id = request.POST.get('bank')
         loan_amount = float(request.POST.get('loan_amount'))
-        interest_rate = float(request.POST.get('interest_rate'))
         loan_tenure = int(request.POST.get('loan_tenure'))
-        r = (interest_rate / 12) / 100
-        n = loan_tenure * 12
-        emi = (loan_amount * r * ((1 + r) ** n)) / (((1 + r) ** n) - 1)
-        emi = round(emi, 2)
-        context = {'emi': emi}
+        bank = Bank.objects.get(id=bank_id)
+        interest_rate = bank.interest_rate
+        emi_amount = calculate_emi(loan_amount, loan_tenure, interest_rate)
+        car_loan = CarLoan.objects.create(bank=bank, loan_amount=loan_amount, loan_tenure=loan_tenure, interest_rate=interest_rate, emi_amount=emi_amount)
+        return render(request, 'car_loan_emi.html', {'banks': banks, 'emi_amount': emi_amount})
     else:
-        context = {}
-    return render(request, 'calculate_emi.html', context)
+        return render(request, 'car_loan_emi.html', {'banks': banks})
+
+def calculate_emi(loan_amount, loan_tenure, interest_rate):
+    r = interest_rate / (12 * 100)
+    n = loan_tenure * 12
+    emi = loan_amount * r * ((1 + r) ** n) / (((1 + r) ** n) - 1)
+    return round(emi, 2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def predict(request):
+    return render(request, 'predict.html')
+
+def predict_price(request):
+    # Load the saved linear regression model
+    model = pickle.load(open('LinearRegressionModel.pkl', 'rb'))
+
+    # Load the cleaned car data
+    car = pd.read_csv('Cleaned_Car_data.csv')
+
+    # Get the form data
+    if request.method=='POST':
+        company = request.POST['company']
+        car_model = request.POST['name']
+        year = int(request.POST['year'])
+        fuel_type = request.POST['fuel_type']
+        kms_driven = int(request.POST['kms_driven'])
+        
+
+    # Make a prediction using the model
+    prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
+                              data=[[car_model, company, year, kms_driven, fuel_type]]))
+    
+    # Return the prediction as a JSON response
+    return JsonResponse({'predicted_price': round(prediction[0], 2)})
+
+
+
 
 
 # def signup(request):

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+</head>
+<body>
+    {% if prediction %}
+        <h1>Prediction:</h1>
+        <p>The predicted price of {{ car_model }} (made by {{ company }}) in the year {{ year }} with {{ driven }} kilometers driven and {{ fuel_type }} fuel type is: {{ prediction }}.</p>
+    {% elif error_message %}
+        <h1>Error:</h1>
+        <p>{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>

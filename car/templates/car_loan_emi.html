@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Car Loan EMI Calculator</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="bank">Bank:</label>
+        <select name="bank" id="bank" required>
+            <option value="">Select a bank</option>
+            {% for bank in banks %}
+                <option value="{{ bank.id }}" data-interest-rate="{{ bank.interest_rate }}">{{ bank.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="loan_amount">Loan amount:</label>
+        <input type="number" name="loan_amount" id="loan_amount" required>
+        <br><br>
+        <label for="loan_tenure">Loan tenure (in years):</label>
+        <input type="number" name="loan_tenure" id="loan_tenure" required>
+        <br><br>
+        <label for="interest_rate">Interest rate:</label>
+        <input type="text" name="interest_rate" id="interest_rate" readonly>
+        <br><br>
+        <button type="submit">Calculate EMI</button>
+    </form>
+
+    <script>
+        var bankSelect = document.getElementById('bank');
+        var interestRateInput = document.getElementById('interest_rate');
+
+        bankSelect.addEventListener('change', function() {
+            var bankOption = this.options[this.selectedIndex];
+            var interestRate = bankOption.getAttribute('data-interest-rate');
+            interestRateInput.value = interestRate;
+        });
+    </script>
+
+{% if emi_amount %}
+<h2>EMI: {{ emi_amount }}</h2>
+{% endif %}
+
+{% endblock %}
+</body>
+</html>
+

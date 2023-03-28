@@ -42,6 +42,7 @@
 						<li><a href="{% url 'service' %}">Services</a></li>
                         <li><a href="{% url 'packages' %}">Packages</a></li>
                         <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'predict' %}">predict</a></li>
                         
                         {% if request.session.username %}
                         <li class="nav-item"><a href="{% url 'testdrive' %}" class="nav-link">Test Drive</a></li>
