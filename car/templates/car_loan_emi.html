@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-<<<<<<< HEAD
      <style>
         /* CSS styles go here */
         form {
@@ -102,13 +101,6 @@
     {% block content %}
     <h1 align="center">Car Loan EMI Calculator</h1>
     <form method="post" action="{% url 'car_loan_emi' %}">
-=======
-</head>
-<body>
-    {% block content %}
-    <h1>Car Loan EMI Calculator</h1>
-    <form method="post">
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
         {% csrf_token %}
         <label for="bank">Bank:</label>
         <select name="bank" id="bank" required>
@@ -117,7 +109,6 @@
                 <option value="{{ bank.id }}" data-interest-rate="{{ bank.interest_rate }}">{{ bank.name }}</option>
             {% endfor %}
         </select>
-<<<<<<< HEAD
         
         <!-- <label for="down_payment">Down Payment:</label>
         <input type="number" id="down_payment" name="down_payment" required>
@@ -131,18 +122,6 @@
         <label for="interest_rate">Interest rate:</label>
         <input type="text" name="interest_rate" id="interest_rate" readonly>
         <br>
-=======
-        <br><br>
-        <label for="loan_amount">Loan amount:</label>
-        <input type="number" name="loan_amount" id="loan_amount" required>
-        <br><br>
-        <label for="loan_tenure">Loan tenure (in years):</label>
-        <input type="number" name="loan_tenure" id="loan_tenure" required>
-        <br><br>
-        <label for="interest_rate">Interest rate:</label>
-        <input type="text" name="interest_rate" id="interest_rate" readonly>
-        <br><br>
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
         <button type="submit">Calculate EMI</button>
     </form>
 
@@ -156,7 +135,6 @@
             interestRateInput.value = interestRate;
         });
     </script>
-<<<<<<< HEAD
     <script>
         const downPaymentInput = document.getElementById('down_payment');
         const loanAmountInput = document.getElementById('loan_amount');
@@ -169,8 +147,6 @@
         });
     </script>
     
-=======
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
 
 {% if emi_amount %}
 <h2>EMI: {{ emi_amount }}</h2>

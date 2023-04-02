@@ -51,6 +51,12 @@
 
     <p class="tip"></p>
 <div class="cont">
+    {% if messages %}
+    {% for msg in messages %}
+    <h2>{{msg}}</h2>
+    
+    {% endfor %}
+    {% endif %}
     <form  action="{% url 'login' %}" method="POST" >
         {% csrf_token %}
   <div class="form sign-in">
@@ -91,7 +97,7 @@
       </div>
     </div>
     <div class="form sign-up">
-        <form onsubmit ="return unameValidation() && emailValidation() &&  passwordValidation() && cpasswordValidation()"action="{% url 'register' %}" method="POST" >
+        <form onsubmit ="return unameValidation() && emailValidation() && phoneValidation() && passwordValidation() && cpasswordValidation()"action="{% url 'register' %}" method="POST" >
             {% csrf_token %}
       <!-- <h2>Time to feel like home,</h2> -->
       <label>
@@ -106,7 +112,7 @@
       </label>
       <label>
         <span>Phone</span>
-        <input type="number" name="phone"  required/>
+        <input type="number" name="phone"  onkeyup='phoneValidation(this)' required/>
         <span class="error-msg" id="phone"> </span>
       </label>
       
@@ -214,9 +220,7 @@
           }
       }
   
-          
-          
-          
+              
           function emailValidation(inputTxt){
               // ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
               var regx = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -237,50 +241,63 @@
           }
           
          
+          function phoneValidation(inputTxt){
+            var regx = /^[6-9][0-9]{9}$/;
+            var textField = document.getElementById("phone");
+            if(inputTxt.value != '' )
+            {
+                if(inputTxt.value.match(regx)){
+                    textField.textContent = '';
+                    textField.style.color = "green";
+                }else{
+                    textField.textContent = '**not valid phone number';
+                    textField.style.color = "red";
+                }
+            }
+            else{
+                textField.textContent = 'your input is empty';
+                textField.style.color = "red";
+            }
+        }
           
-          
-          function passwordValidation(inputTxt){
-          
-              var regx = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}/;
-              var textField = document.getElementById("password");
-          
-              if(inputTxt.value != '' ){
-                      if(inputTxt.value.match(regx)){
-                          textField.textContent = '';
-                          textField.style.color = "green";
-          
-                      }else{
-                          textField.textContent = 'Must contain at least one number and one uppercase and lowercase letter and aleast 5 characters';
-                          textField.style.color = "red";
-                      }
-              }else{
-                  textField.textContent = 'your input is empty';
-                  textField.style.color = "red";
-              }
-          }
-          
-          
-          function cpasswordValidation(inputTxt){
-          
-              var regx =  document.getElementById("pass").value;
-              var regy =  document.getElementById("cpass").value;
-              var textField = document.getElementById("cpassword");
-              var textField1 = document.getElementById("password");
-          
-              if(inputTxt.value != '' ){
-                      if(regx == regy){
-                          textField.textContent = '';
-                          textField.style.color = "green";
-          
-                      }else{
-                          textField.textContent = 'not match';
-                          textField.style.color = "red";
-                      }
-                  }else{
-                      textField.textContent = '';
-                      textField.style.color = "red";
-                  }
-          }
+        function passwordValidation(inputTxt){
+            var regx = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}/;
+            var textField = document.getElementById("password");
+            if(inputTxt.value != '' )
+            {
+                if(inputTxt.value.match(regx)){
+                    textField.textContent = '';
+                    textField.style.color = "green";
+                }else{
+                    textField.textContent = 'Must contain at least one number and one uppercase and lowercase letter and aleast 5 characters';
+                    textField.style.color = "red";
+                }
+            }
+            else{
+                textField.textContent = 'your input is empty';
+                textField.style.color = "red";
+            }
+        }
+        
+        
+        function cpasswordValidation(inputTxt){
+            var regx =  document.getElementById("pass").value;
+            var regy =  document.getElementById("cpass").value;
+            var textField = document.getElementById("password");
+            var textField1 = document.getElementById("cpassword");
+            if(inputTxt.value != '' ){
+                if(regx == regy){
+                    textField1.textContent = '';
+                    textField1.style.color = "green";
+                }else{
+                    textField1.textContent = 'not match';
+                    textField1.style.color = "red";
+                }
+            }else{
+                textField1.textContent = '';
+                textField1.style.color = "red";
+            }
+        }
           
             </script>
     <!-- javascript
