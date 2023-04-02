@@ -1,7 +1,11 @@
 from django.contrib import admin
 from email.headerregistry import Group
 from django.contrib import admin
+<<<<<<< HEAD
 from.models import Vehicles,customer,staff,Bank,Productgallery
+=======
+from.models import Vehicles,customer,staff,Bank
+>>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
 from django.contrib.auth.models import Group,User
 
 # Register your models here.
