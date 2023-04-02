@@ -51,18 +51,21 @@
 
     <p class="tip"></p>
 <div class="cont">
-    <form action="{% url 'login' %}" method="POST" >
+    <form  action="{% url 'login' %}" method="POST" >
         {% csrf_token %}
   <div class="form sign-in">
     
     <h2>Welcome back,</h2>
     <label>
       <span>Username</span>
-      <input type="text" name="username"/>
+      <input type="text" name="username" id="username"  required/>
+      
     </label>
     <label>
       <span>Password</span>
-      <input type="password" name="password" />
+      <input type="password" name="password" id="password"   required/>
+      
+        <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
     </label>
     <p class="forgot-pass">
     <a href="{% url 'password_reset' %}" class="forgot-pass" text-align="center">Forgot password?</a>
@@ -88,29 +91,35 @@
       </div>
     </div>
     <div class="form sign-up">
-        <form action="{% url 'register' %}" method="POST" >
+        <form onsubmit ="return unameValidation() && emailValidation() &&  passwordValidation() && cpasswordValidation()"action="{% url 'register' %}" method="POST" >
             {% csrf_token %}
       <!-- <h2>Time to feel like home,</h2> -->
       <label>
         <span>Username</span>
-        <input type="text" name="username"/>
+      <input type="text" name="username" id="username" onkeyup='unameValidation(this)' required/>
+      <span class="error-msg" id="uname"> </span>
       </label>
       <label>
         <span>Email</span>
-        <input type="email" name="email" />
+        <input type="email" name="email" id="email_id" onkeyup='emailValidation(this)' required/>
+        <span class="error-msg" id="email"> </span>
       </label>
       <label>
         <span>Phone</span>
-        <input type="number" name="phone" />
+        <input type="number" name="phone"  required/>
+        <span class="error-msg" id="phone"> </span>
       </label>
       
       <label>
         <span>Password</span>
-        <input type="password" name="password"/>
+        <input type="password" name="password" id="pass"  onkeyup='passwordValidation(this)' required/>
+      <span class="error-msg" id="password"> </span>
+        <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
       </label>
       <label>
         <span>Confirm Password</span>
-        <input type="password" name="cpassword" />
+        <input type="password" name="cpassword" id="cpass" onkeyup='cpasswordValidation(this)' required/>
+        <span class="error-msg" id="cpassword"> </span>
       </label>
       <button type="submit" class="submit">Sign Up</button>
     </form>
@@ -174,6 +183,106 @@
         </footer>
     </div>
     <a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+
+    <script type="text/javascript">
+    
+      function unameValidation(inputTxt){
+          
+          var regx = /^[a-zA-Z]+$/;
+          var textField = document.getElementById("uname");
+      
+          if(inputTxt.value != '' ){
+      
+              if(inputTxt.value.length >= 2){
+      
+                  if(inputTxt.value.match(regx)){
+                      textField.textContent = '';
+                      textField.style.color = "green";
+      
+                  }else{
+                      textField.textContent = 'only characters allowded';
+                      textField.style.color = "red";
+                  }
+              }else{
+                  textField.textContent = 'your input mut be more than two chracters';
+                  textField.style.color = "red";
+              }
+          }else{
+              textField.textContent = 'your input is empty';
+      
+              textField.style.color = "red";
+          }
+      }
+  
+          
+          
+          
+          function emailValidation(inputTxt){
+              // ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+              var regx = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+              var textField = document.getElementById("email");
+          
+              if(inputTxt.value != '' ){
+                  if(inputTxt.value.match(regx)){
+                      textField.textContent = '';
+                      textField.style.color = "green";
+                  }else{
+                      textField.textContent = 'email is not valid!!!';
+                      textField.style.color = "red";
+                  }
+              }else{
+                  textField.textContent = 'your input is empty';
+                  textField.style.color = "red";
+              }
+          }
+          
+         
+          
+          
+          function passwordValidation(inputTxt){
+          
+              var regx = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}/;
+              var textField = document.getElementById("password");
+          
+              if(inputTxt.value != '' ){
+                      if(inputTxt.value.match(regx)){
+                          textField.textContent = '';
+                          textField.style.color = "green";
+          
+                      }else{
+                          textField.textContent = 'Must contain at least one number and one uppercase and lowercase letter and aleast 5 characters';
+                          textField.style.color = "red";
+                      }
+              }else{
+                  textField.textContent = 'your input is empty';
+                  textField.style.color = "red";
+              }
+          }
+          
+          
+          function cpasswordValidation(inputTxt){
+          
+              var regx =  document.getElementById("pass").value;
+              var regy =  document.getElementById("cpass").value;
+              var textField = document.getElementById("cpassword");
+              var textField1 = document.getElementById("password");
+          
+              if(inputTxt.value != '' ){
+                      if(regx == regy){
+                          textField.textContent = '';
+                          textField.style.color = "green";
+          
+                      }else{
+                          textField.textContent = 'not match';
+                          textField.style.color = "red";
+                      }
+                  }else{
+                      textField.textContent = '';
+                      textField.style.color = "red";
+                  }
+          }
+          
+            </script>
     <!-- javascript
         ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

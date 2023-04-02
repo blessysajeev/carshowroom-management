@@ -26,8 +26,13 @@ urlpatterns = [
     path('showroomvisit',views.showroomvisit,name="showroomvisit"),
     path('job',views.job,name="job"),
     path('visit_delete/<int:id>',views.visit_delete,name='visit_delete'),
+    path('car_loan_emi', views.car_loan_emi, name='car_loan_emi'),
     path('calculate_emi', views.calculate_emi, name='calculate_emi'),
-    # path('book/<int:id>',views.book,name='book'),
+    path('emi', views.car_loan_emi, name='emi'),
+    path('predict_price/', views.predict_price, name='predict_price'),
+    path('predict', views.predict, name='predict'),
+    path('result', views.predict_price, name='result'),
+    path('book/<int:id>',views.book,name='book'),
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(), name='password_reset'),
