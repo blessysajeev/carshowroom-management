@@ -274,11 +274,7 @@ def car_loan_emi(request):
         interest_rate = bank.interest_rate
         emi_amount = calculate_emi(loan_amount, loan_tenure, interest_rate)
         car_loan = CarLoan.objects.create(bank=bank, loan_amount=loan_amount, loan_tenure=loan_tenure, interest_rate=interest_rate, emi_amount=emi_amount)
-<<<<<<< HEAD
         return render(request, 'emi.html', {'banks': banks, 'emi_amount': emi_amount})
-=======
-        return render(request, 'car_loan_emi.html', {'banks': banks, 'emi_amount': emi_amount})
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
     else:
         return render(request, 'car_loan_emi.html', {'banks': banks})
 
@@ -288,24 +284,7 @@ def calculate_emi(loan_amount, loan_tenure, interest_rate):
     emi = loan_amount * r * ((1 + r) ** n) / (((1 + r) ** n) - 1)
     return round(emi, 2)
 
-<<<<<<< HEAD
 # USED CAR PRICE PREDICTION
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
 
 def predict(request):
     return render(request, 'predict.html')
@@ -317,13 +296,10 @@ def predict_price(request):
     # Load the cleaned car data
     car = pd.read_csv('Cleaned_Car_data.csv')
 
-<<<<<<< HEAD
     # Get unique values of company and name columns
     companies = car['company'].unique()
     names = car['name'].unique()
 
-=======
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
     # Get the form data
     if request.method=='POST':
         company = request.POST['company']
@@ -334,7 +310,6 @@ def predict_price(request):
         
 
     # Make a prediction using the model
-<<<<<<< HEAD
         prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
                               data=[[car_model, company, year, kms_driven, fuel_type]]))
     
@@ -349,13 +324,6 @@ def predict_price(request):
         return render(request, 'result.html', context)
 
     
-=======
-    prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
-                              data=[[car_model, company, year, kms_driven, fuel_type]]))
-    
-    # Return the prediction as a JSON response
-    return JsonResponse({'predicted_price': round(prediction[0], 2)})
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
 
 
 

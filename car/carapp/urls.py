@@ -28,17 +28,11 @@ urlpatterns = [
     path('visit_delete/<int:id>',views.visit_delete,name='visit_delete'),
     path('car_loan_emi', views.car_loan_emi, name='car_loan_emi'),
     path('calculate_emi', views.calculate_emi, name='calculate_emi'),
-<<<<<<< HEAD
     path('emi', views.car_loan_emi, name='emi'),
     path('predict_price/', views.predict_price, name='predict_price'),
     path('predict', views.predict, name='predict'),
     path('result', views.predict_price, name='result'),
     path('book/<int:id>',views.book,name='book'),
-=======
-    path('predict_price/', views.predict_price, name='predict_price'),
-    path('predict', views.predict, name='predict'),
-    # path('book/<int:id>',views.book,name='book'),
->>>>>>> dbe8adc81f270ff8faf1403c5d073de8decd1232
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(), name='password_reset'),
