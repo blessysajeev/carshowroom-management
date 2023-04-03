@@ -74,6 +74,7 @@ class test_drive(models.Model):
 
     def _str_(self):
         return '{}'.format(self.carmodel)
+    
     def __str__(self):
         return self.username.username   
 
@@ -95,6 +96,7 @@ class showroom_visit(models.Model):
 
     def _str_(self):
         return '{}'.format(self.carmodel)
+        
     def __str__(self):
         return self.username.username   
 
