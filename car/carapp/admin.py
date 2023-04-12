@@ -2,7 +2,7 @@ from django.contrib import admin
 from email.headerregistry import Group
 from django.contrib import admin
 
-from.models import Vehicles,customer,staff,Bank,Productgallery,test_drive,showroom_visit
+from.models import Vehicles,customer,staff,Bank,Productgallery,test_drive,showroom_visit,Payments
 from.models import Vehicles,customer,staff,Bank
 from django.contrib.auth.models import Group,User
 
@@ -80,7 +80,11 @@ class BankAdmin(admin.ModelAdmin):
     # prepopulated_fields={'slug':('name',)}
 admin.site.register(Bank,BankAdmin)
 
-
+class PaymentAdmin(admin.ModelAdmin):
+     list_display=['user','amount']
+     
+    # prepopulated_fields={'slug':('name',)}
+admin.site.register(Payments,PaymentAdmin)
 # class staffloginAdmin(admin.ModelAdmin):
 #     list_display=['username']
 #     exclude=('password',)

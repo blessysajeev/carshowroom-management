@@ -213,7 +213,7 @@ opacity: 0.9;
 <h1>Take your Showroom Visit</h1>
 </div>
 
-<form  action="" method="POST">
+<form  action="" method="POST" onsubmit ="return  emailValidation() && phoneValidation()" >
     {% csrf_token %}
 
 <!-- <div class="row">
@@ -245,7 +245,7 @@ opacity: 0.9;
 </div>
 <div class="col-md-4">
     <div class="form-group">
-        <input  type="date" class="form-control" required name="visitdate">
+        <input  type="date" class="form-control" required name="visitdate" min="2023-04-03" max="2023-04-07">
            
     </input>
         <span class="select-arrow"></span>
@@ -267,23 +267,67 @@ opacity: 0.9;
 </div>
 </div>
 <div class="row">
-<div class="col-md-6">
-    <div class="form-group">
-        <input class="form-control" type="email" placeholder="Enter your Email" name="Email">
-        <span class="form-label">Email</span>
+    <div class="col-md-6">
+        <div class="form-group">
+            <input class="form-control" type="email" placeholder="Enter your Email" id="email_id" name="Email" onkeyup='emailValidation(this)'>
+            <span class="form-label">Email</span>
+            <span class="error-msg" id="email"> </span>
+        </div>
     </div>
-</div>
-<div class="col-md-6">
-    <div class="form-group">
-        <input class="form-control" type="tel" placeholder="Enter you Phone" name="Contact">
-        <span class="form-label">Contact</span>
+    <div class="col-md-6">
+        <div class="form-group">
+            <input class="form-control" type="number"  placeholder="Enter you Phone" name="Contact" onkeyup='phoneValidation(this)'>
+            <span class="form-label">Contact</span>
+            <span class="error-msg" id="phone"> </span>
+        </div>
     </div>
-</div>
 </div>
 <div class="form-btn">
 <button class="submit-btn" >Book Now</button>
 </div>
 </form>
+<script type="text/javascript">
+
+    function emailValidation(inputTxt){
+        // ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+        var regx = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+        var textField = document.getElementById("email");
+    
+        if(inputTxt.value != '' ){
+            if(inputTxt.value.match(regx)){
+                textField.textContent = '';
+                textField.style.color = "green";
+            }else{
+                textField.textContent = 'email is not valid!!!';
+                textField.style.color = "red";
+            }
+        }else{
+            textField.textContent = 'your input is empty';
+            textField.style.color = "red";
+        }
+    }
+    
+    
+    function phoneValidation(inputTxt){
+      var regx = /^[6-9][0-9]{9}$/;
+      var textField = document.getElementById("phone");
+      if(inputTxt.value != '' )
+      {
+          if(inputTxt.value.match(regx)){
+              textField.textContent = '';
+              textField.style.color = "green";
+          }else{
+              textField.textContent = '**not valid phone number';
+              textField.style.color = "red";
+          }
+      }
+      else{
+          textField.textContent = 'your input is empty';
+          textField.style.color = "red";
+      }
+    }
+    
+    </script>
 </div>
 </div>
 </div>

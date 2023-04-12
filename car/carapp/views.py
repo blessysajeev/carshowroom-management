@@ -10,6 +10,8 @@ import pickle
 import pandas as pd
 import numpy as np
 from django.http import JsonResponse
+import razorpay
+from django.conf import settings
 
 # Create your views here.
 
@@ -160,13 +162,83 @@ def cars(request,id):
     }
     return render(request,'cars.html',context)
 
-def book(request,id):
-    lst=Vehicles.objects.filter(id=id)
-    context={
-        'lst':lst,
-        
-    }
-    return render(request,'book.html',context)
+def book(request,id=None):
+    lst=Vehicles.objects.get(id=id)
+    print(lst)
+    # context={
+    #     'lst':lst,     
+    # }
+    
+        # Get the down payment amount entered by the user
+    down_payment = int(lst.exshowroomprice)*(10/100)*100
+    print(lst.exshowroomprice)
+
+        #  create a Razorpay client and generate a payment order
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    order = client.order.create({
+            'amount': down_payment,
+            'currency': 'INR',
+            # 'payment_capture': '1'
+    })
+        # print(order)
+    order_id = order['id']
+
+    order_status = order['status']
+    if order_status == 'created':
+        payment = Payments(
+            # user = customer.objects.get(id=request.user.id),
+            amount = down_payment,
+            razorpay_order_id=order_id,
+            razorpay_payment_status=order_status,
+        )
+        payment.save()
+
+        context = {
+                'order_id': order_id,
+                'amount': down_payment,
+                'currency': 'INR',
+                'lst':lst
+            }
+        print(context)
+
+
+    return render(request, 'book.html', context)
+    
+def paydone(request):
+    return render(request,'pymentdone.html')
+
+
+# # Check if the down payment amount is valid (i.e., greater than or equal to 20000)
+        # if down_payment < 20000:
+        #     context['error'] = "Minimum down payment amount is 20000"
+        # else:
+        #     # TODO: Process payment using a payment gateway, such as Razorpay
+        #     context['success'] = True
+
+
+# def booking(request):
+#     if request.method == 'POST':
+#         # get the amount from the form
+#         down_payment = request.POST.get('down_payment')
+#         print(down_payment)
+#         amount_in_paise = max(int(down_payment) * 100, 100) # convert down payment to paise and ensure minimum value of 100 paise
+
+#         # create a Razorpay client and generate a payment order
+#         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+#         order = client.order.create({
+#             'amount': amount_in_paise,
+#             'currency': 'INR',
+#             'payment_capture': '1'
+#         })
+
+#         # render the payment form with the order details
+#         return render(request, 'book.html', {'order_id': order['id'], 'amount': amount_in_paise})
+
+#     else:
+#         # render the initial form with the list of products
+#         lst = [{'name': 'Product1', 'exshowroomprice': '100000'}, {'name': 'Product2', 'exshowroomprice': '200000'}, {'name': 'Product3', 'exshowroomprice': '300000'}]
+#         return render(request, 'book.html', {'lst': lst})
+
 
 def stafflogin(request):
     if request.method=='POST':
@@ -281,7 +353,7 @@ def car_loan_emi(request):
 def calculate_emi(loan_amount, loan_tenure, interest_rate):
     r = interest_rate / (12 * 100)
     n = loan_tenure * 12
-    emi = loan_amount * r * ((1 + r) ** n) / (((1 + r) ** n) - 1)
+    emi = loan_amount * r * ((1 + r) ** n) / (((1 + r)  ** n) - 1)
     return round(emi, 2)
 
 # USED CAR PRICE PREDICTION
@@ -299,7 +371,9 @@ def predict_price(request):
     # Get unique values of company and name columns
     companies = car['company'].unique()
     names = car['name'].unique()
+    fuel_type = car['fuel_type'].unique()
 
+    
     # Get the form data
     if request.method=='POST':
         company = request.POST['company']
@@ -317,6 +391,7 @@ def predict_price(request):
         context = {
         'companies': companies,
         'names': names,
+        'fuel_type' : fuel_type,
         'prediction': round(prediction[0], 2)
     }
 

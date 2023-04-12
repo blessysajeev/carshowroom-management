@@ -1,0 +1,33 @@
+
+
+{% load static %}
+<html>
+    <head>
+        <style>
+            img {
+        border-radius: 50%;
+        height: 250px;
+        width: 250px;
+        }
+
+        </style>
+        </head>
+    <body>
+    <form method="POST">
+        {% block content %}
+        <center><img src="{% static 'img/check.webp' %}">
+        <h1>Payment Successful</h1>
+           
+            <h4></h4><a href="#">Download your invoice here!</a>
+            <br>
+            <br>
+            <p>Thank you for your payment!<a href="{% url 'index' %}"> Click Here </a> to return home</p>
+        </form>
+
+        </center> 
+
+
+
+        {% endblock %}
+    </body>
+</html>

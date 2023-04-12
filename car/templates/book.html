@@ -51,15 +51,14 @@
       </style> 
 </head>
 <body>
-    <form method="POST">
+  
+    <form method="POST" action="{% url 'paydone' %}">
 		{% csrf_token %}
 
-      {% for i in lst %}
-        <h2>product name : {{i.name}}</h2>
-        <h2>product price : {{i.exshowroomprice}}</h2>
+        <h2>product name : {{lst.name}}</h2>
+        <h2>product price : {{lst.exshowroomprice}}</h2>
         <h2>company : maruthi</h2>
-      {% endfor %}
-      <label for="loan_tenure">downPayment Amount:</label>
+      <label for="down_payment">downPayment Amount:</label>
         <input type="number" name="down_payment" id="down_payment" required>
         <h4>Minimum downpayment amount is 20000 </h4>
       <button id="rzp-button1" type="submit" class="submit-btn">PAYMENT</button>
@@ -69,9 +68,9 @@
 
 		var options = {
 		  "key": "rzp_test_wT8W2jNy560ysZ", // Enter the Key ID generated from the Dashboard
-		  "amount": "  down_payment ", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+		  "amount": '{{amount}}', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 		  "currency": "INR",
-		  "name": "Amusement Park",
+		  "name": "car showroom",
 		  "description": "Test Transaction",
 		  "image": "https://example.com/your_logo",
 		  "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -87,7 +86,7 @@
 		
 			var form = document.getElementById["myform"];
 				var a = response.razorpay_payment_id;
-				window.location.href = `http://127.0.0.1:8000/paymentdone?signature=${response.razorpay_signature}&payment_id=`+a
+				window.location.href = `http://127.0.0.1:8000/paydone?signature=${response.razorpay_signature}&payment_id=`+a
 				
 			  
 		  },
@@ -100,6 +99,7 @@
 			  "color": "#3399cc"
 		  }
 	  };
+    
 	  var rzp1 = new Razorpay(options);
 rzp1.on('payment.failed', function (response){
   alert(response.error.code);
@@ -116,6 +116,7 @@ document.getElementById('rzp-button1').onclick = function(e){
 }
  </script>
     </form>
+    
     
 </body>
 </html>

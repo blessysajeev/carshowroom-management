@@ -50,11 +50,12 @@
       </style> 
 </head>
 <body>
+<a href="{% url 'index' %}" class="nav-link"><b>BACK</b></a>
     <form method="POST">
 		{% csrf_token %}
 
         {% if emi_amount %}
-<h2>EMI: {{ emi_amount }}</h2>
+<h2>EMI Amount is: {{ emi_amount }}</h2>
 {% endif %}
 
     <h3>if you are interested to buy the car <a href="" role="button">Book Now</a></h3>

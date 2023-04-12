@@ -33,6 +33,7 @@ urlpatterns = [
     path('predict', views.predict, name='predict'),
     path('result', views.predict_price, name='result'),
     path('book/<int:id>',views.book,name='book'),
+    path('paydone',views.paydone,name='paydone'),
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(), name='password_reset'),

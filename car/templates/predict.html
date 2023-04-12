@@ -42,6 +42,7 @@
     </style>
   </head>
   <body>
+    <h2 align="center"><u>Enter your car details to find the current price</u></h2>
     <form method="POST" action="{% url 'predict_price' %}">
 		{% csrf_token %}
 
@@ -59,6 +60,8 @@
 	  
 	  <label for="fuel_type">Fuel Type:</label>
       <input type="text" id="fuel_type" name="fuel_type" required>
+    
+    
 
       <input type="submit" value="Predict Price">
     </form>

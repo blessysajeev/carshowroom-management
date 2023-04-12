@@ -57,7 +57,6 @@ class Productgallery(models.Model):
         verbose_name_plural='Product gallery'
 
 class test_drive(models.Model):
-   
     username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="customername")
     venue = models.CharField(max_length=100,null=True)
     carmodel = models.CharField(max_length=100,null=True)
@@ -65,18 +64,18 @@ class test_drive(models.Model):
     Email = models.EmailField(max_length=100,null=True)
     testdate = models.DateField(null=True, auto_now_add=False)
     testtime = models.TimeField(null=True, blank=True)
-
+    def __str__(self):
+        return '{}'.format(self.username)
 
     class Meta:
         ordering=('carmodel',)
         verbose_name='test_drive'
         verbose_name_plural='test_drive'
 
-    def _str_(self):
-        return '{}'.format(self.carmodel)
     
-    def __str__(self):
-        return self.username.username   
+    
+    # def __str__(self):
+    #     return str(self.username.username ) 
 
 
 class showroom_visit(models.Model):
@@ -136,6 +135,14 @@ class CarLoan(models.Model):
     interest_rate = models.FloatField()
     emi_amount = models.FloatField()
 
+class Payments(models.Model):
+    user = models.ForeignKey(customer, on_delete=models.CASCADE,null=True)
+    # name = models.CharField(max_length=100)
+    amount = models.CharField(max_length=100)
+    razorpay_order_id = models.CharField(max_length=100, blank=True)
+    razorpay_payment_status=models.CharField(max_length=100, blank=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True,null=True)
+    paid = models.BooleanField(default=False)  
     
 # class MyAccountManager(BaseUserManager):
 #     def create_user(self,username,phonenumber,email,password=None):
