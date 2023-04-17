@@ -55,12 +55,13 @@
     <form method="POST" action="{% url 'paydone' %}">
 		{% csrf_token %}
 
-        <h2>product name : {{lst.name}}</h2>
-        <h2>product price : {{lst.exshowroomprice}}</h2>
-        <h2>company : maruthi</h2>
-      <label for="down_payment">downPayment Amount:</label>
+        <h2>Product name : {{lst.name}}</h2>
+        <h2>Product price : {{lst.exshowroomprice}}</h2>
+        <h2>Company : maruthi</h2>
+        <h2>Downpayment:{{ down_payment }}</h2>
+      <!-- <label for="down_payment">downPayment Amount:</label>
         <input type="number" name="down_payment" id="down_payment" required>
-        <h4>Minimum downpayment amount is 20000 </h4>
+        <h4>Minimum downpayment amount is 20000 </h4> -->
       <button id="rzp-button1" type="submit" class="submit-btn">PAYMENT</button>
 
 		

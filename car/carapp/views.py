@@ -164,19 +164,22 @@ def cars(request,id):
 
 def book(request,id=None):
     lst=Vehicles.objects.get(id=id)
-    print(lst)
+   
     # context={
     #     'lst':lst,     
     # }
     
         # Get the down payment amount entered by the user
-    down_payment = int(lst.exshowroomprice)*(10/100)*100
+        
+    down_payment = int(lst.exshowroomprice)*(10/100)
+    
+    amount = down_payment * 100
     print(lst.exshowroomprice)
 
         #  create a Razorpay client and generate a payment order
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     order = client.order.create({
-            'amount': down_payment,
+            'amount': amount,
             'currency': 'INR',
             # 'payment_capture': '1'
     })
@@ -187,7 +190,7 @@ def book(request,id=None):
     if order_status == 'created':
         payment = Payments(
             # user = customer.objects.get(id=request.user.id),
-            amount = down_payment,
+            amount = amount,
             razorpay_order_id=order_id,
             razorpay_payment_status=order_status,
         )
@@ -195,9 +198,10 @@ def book(request,id=None):
 
         context = {
                 'order_id': order_id,
-                'amount': down_payment,
+                'amount': amount,
                 'currency': 'INR',
-                'lst':lst
+                'lst':lst,
+                'down_payment': down_payment
             }
         print(context)
 

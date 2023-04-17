@@ -7,6 +7,7 @@ from django.db import models
 # Create your models here.
 
 class customer(models.Model):
+
     username = models.CharField(max_length=100,unique=True)
     phone = models.CharField(max_length=15,unique=True,null=True)
     email = models.EmailField(max_length=100, unique=True)
@@ -106,6 +107,7 @@ class staff(models.Model):
     phone = models.CharField(max_length=15,unique=True,null=True)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=250)
+    staff_assigned = models.OneToOneField('self', null=True, blank=True, related_name='assigned_staff', on_delete=models.SET_NULL)
     
     class Meta:
         ordering=('username',)

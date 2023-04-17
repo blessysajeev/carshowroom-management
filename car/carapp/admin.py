@@ -59,11 +59,8 @@ class showroom_visitAdmin(admin.ModelAdmin):
 admin.site.register(showroom_visit,showroom_visitAdmin)
 
 class staffAdmin(admin.ModelAdmin):
-    list_display=('phone','username')
-    # list_display_links=['username']
-    # exclude=('password',)
-    list_editable=['username']
-    
+    list_display=['username','email','phone']
+
     def has_add_permission(self, request, obj=None):
         return False
     def has_change_permission(self, request, obj=None):
@@ -72,7 +69,22 @@ class staffAdmin(admin.ModelAdmin):
         return False
 
     verbose_name_plural = "Staff Details"
+
+    actions = ['assign_customers']
+
+    def assign_customers(self, request, queryset):
+        selected_staff = queryset.first()
+        customers = customer.objects.all()
+        for c in customers:
+            if not c.staff_assigned:
+                c.staff_assigned = selected_staff
+                c.save()
+        self.message_user(request, f'Successfully assigned customers to {selected_staff.username}')
+
+    assign_customers.short_description = "Assign selected staff to all unassigned customers"
+
 admin.site.register(staff,staffAdmin)
+
 
 class BankAdmin(admin.ModelAdmin):
      list_display=['name','interest_rate']
