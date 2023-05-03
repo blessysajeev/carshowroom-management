@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.http import HttpResponse
 from sklearn.preprocessing import LabelEncoder
@@ -105,6 +106,10 @@ def change_password(request):
             return redirect('change_password')
     return render(request, 'change/change_password.html')
 
+@login_required
+def profile(request,id):
+    profiles = customer.object.get(id=id)
+    return render(request, 'profile.html', {'profiles': profiles})
 
 def testdrive(request):  
     obj={}
@@ -118,9 +123,9 @@ def testdrive(request):
     if request.method=='POST':
         
         username=request.session['username']
-        user=customer.objects.filter(username=username)
+        user=User.objects.filter(username=username)
         
-        for i in user:
+        for i in user:  
             id=i.id
             print(id)
         
@@ -142,8 +147,10 @@ def testdrive(request):
     return render(request,'testdrive.html',context)
 
 def testview(request):
-    obj=test_drive.objects.all()
-    obje=showroom_visit.objects.all()
+    print(request.user.id)
+    obj=test_drive.objects.get(username=request.user.id)
+    obje=showroom_visit.objects.get(username=request.user.id)
+    print(obj,obje)
     # context={'info':obj}
     return render(request,'testview.html',{'obj':obj,'obje':obje})
 
@@ -295,7 +302,12 @@ def staffregister(request):
     return render(request, 'stafflogin.html')
 
 def staffhome(request):
-    return render(request,'staffhome.html')
+    assignments = StaffAssignment.objects.all()
+    context = {
+        'assignments': assignments
+    }
+    return render(request,'staffhome.html', context)
+
 
 def showroomvisit(request):
     obj={}
@@ -304,7 +316,7 @@ def showroomvisit(request):
     if request.method=='POST':
         
         username=request.session['username']
-        user=customer.objects.filter(username=username)
+        user=User.objects.filter(username=username)
         
         for i in user:
             id=i.id
@@ -331,6 +343,26 @@ def visit_delete(request,id):
     visit_info=showroom_visit.objects.get(id=id)
     visit_info.delete() 
     return redirect('testview')
+
+def customer_details(request,id):
+    # Get the currently logged-in customer
+    # username = request.session.get('username')
+    customer_obj = customer.objects.get(id=id)
+
+    # Get the customer's bookings and appointments
+    # bookings = Booking.objects.filter(customer=customer_obj)
+    # appointments = test_drive.objects.filter(customer=customer_obj)
+    # appointments = showroom_visit.objects.filter(customer=customer_obj)
+
+
+    context = {
+        'customer': customer_obj,
+        # 'bookings': bookings,
+        # 'appointments': appointments
+    }
+
+    return render(request, 'customer_details.html', context)
+
 
 def job(request):
     return render(request,'job.html')
@@ -363,14 +395,29 @@ def calculate_emi(loan_amount, loan_tenure, interest_rate):
 # USED CAR PRICE PREDICTION
 
 def predict(request):
-    return render(request, 'predict.html')
+    car = pd.read_csv('Cleaned_Car_data.csv')
+    data={}
+    for i in ['name','year','company','fuel_type']:
+        data[i]=car[i].unique()
+    
+    context={
+        'name':data['name'],
+        'company':data['company'],
+        'year':data['year'],
+        'fuel_type':data['fuel_type']
+    }
+    
+        
+    
+    return render(request, 'predict.html',context)
 
 def predict_price(request):
     # Load the saved linear regression model
     model = pickle.load(open('LinearRegressionModel.pkl', 'rb'))
-
     # Load the cleaned car data
     car = pd.read_csv('Cleaned_Car_data.csv')
+    
+
 
     # Get unique values of company and name columns
     companies = car['company'].unique()
@@ -388,15 +435,17 @@ def predict_price(request):
         
 
     # Make a prediction using the model
-        prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
-                              data=[[car_model, company, year, kms_driven, fuel_type]]))
+        prediction = model.predict(pd.DataFrame
+        (columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
+        data=[[car_model, company, year, kms_driven, fuel_type]]))
     
      # Pass the context variables to the HTML template
         context = {
         'companies': companies,
         'names': names,
         'fuel_type' : fuel_type,
-        'prediction': round(prediction[0], 2)
+        'prediction': round(prediction[0], 2),
+        'cols':car.columns
     }
 
     # Return the prediction as a JSON response

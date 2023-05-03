@@ -40,16 +40,15 @@
     </tr>
   </thead>
   <tbody align="center">
-    {% for i in obj %}
     <tr>
 
         
-        <td>{{i.carmodel}}</td>
-        <td>{{i.testdate}}</td>
-        <td><span class="badge text-bg-dark">{{i.testtime}}</span></td>
+        <td>{{obj.carmodel}}</td>
+        <td>{{obj.testdate}}</td>
+        <td><span class="badge text-bg-dark">{{obj.testtime}}</span></td>
         <td>
              <!-- <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>  -->
-            <a href="/delete/{{i.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
+            <a href="/delete/{{obj.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
            <!-- <button type="button" class="btn btn-warning btn-sm">Edit</button> -->
            <!-- <button type="button" class="btn btn-danger btn-sm">Delete</button> -->
            <!-- <form action="" method="post" class="d-inline"> -->
@@ -59,7 +58,6 @@
 
         </td>
     </tr>
-  {% endfor %}
   </tbody>
 </table>
 
@@ -85,16 +83,16 @@
        </tr>
      </thead>
      <tbody align="center">
-       {% for j in obje %}
+
        <tr>
    
            
-           <td>{{j.carmodel}}</td>
-           <td>{{j.visitdate}}</td>
-           <td><span class="badge text-bg-dark">{{j.visittime}}</span></td>
+           <td>{{obje.carmodel}}</td>
+           <td>{{obje.visitdate}}</td>
+           <td><span class="badge text-bg-dark">{{obje.visittime}}</span></td>
            <td>
                 <!-- <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>  -->
-               <a href="/visit_delete/{{j.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
+               <a href="/visit_delete/{{obje.id}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"  title="Delete">Delete</i></a>  
               <!-- <button type="button" class="btn btn-warning btn-sm">Edit</button> -->
               <!-- <button type="button" class="btn btn-danger btn-sm">Delete</button> -->
               <!-- <form action="" method="post" class="d-inline"> -->
@@ -104,7 +102,6 @@
    
            </td>
        </tr>
-     {% endfor %}
      </tbody>
    </table>
 

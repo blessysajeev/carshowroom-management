@@ -1,5 +1,5 @@
 from django.db import models 
-
+from django.contrib.auth.models import User
 
 
 
@@ -18,8 +18,8 @@ class customer(models.Model):
         verbose_name='customer'
         verbose_name_plural='customers'
 
-    def _str_(self):
-        return '{}'.format(self.username)
+    def __str__(self):
+        return self.username
 
 class Vehicles(models.Model):
     name=models.CharField(max_length=250,unique=True)
@@ -58,7 +58,7 @@ class Productgallery(models.Model):
         verbose_name_plural='Product gallery'
 
 class test_drive(models.Model):
-    username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="customername")
+    username = models.ForeignKey(User, null=True, on_delete=models.CASCADE,related_name="customername")
     venue = models.CharField(max_length=100,null=True)
     carmodel = models.CharField(max_length=100,null=True)
     Contact = models.BigIntegerField(default=0)
@@ -81,7 +81,7 @@ class test_drive(models.Model):
 
 class showroom_visit(models.Model):
    
-    username = models.ForeignKey(customer, null=True, on_delete=models.CASCADE,related_name="visitername")
+    username = models.ForeignKey(User, null=True, on_delete=models.CASCADE,related_name="visitername")
     carmodel = models.CharField(max_length=100,null=True)
     Contact = models.BigIntegerField(default=0)
     Email = models.EmailField(max_length=100,null=True)
@@ -103,21 +103,30 @@ class showroom_visit(models.Model):
 
 
 class staff(models.Model):
-    username = models.CharField(max_length=100,unique=True)
+    # cname = models.ForeignKey(customer, null=True, blank=True, on_delete=models.SET_NULL)
+    staffname = models.CharField(max_length=100,unique=True)
     phone = models.CharField(max_length=15,unique=True,null=True)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=250)
-    staff_assigned = models.OneToOneField('self', null=True, blank=True, related_name='assigned_staff', on_delete=models.SET_NULL)
     
     class Meta:
-        ordering=('username',)
+        ordering=('staffname',)
         verbose_name='staff'
         verbose_name_plural='staffs'
 
-    def _str_(self):
-        return '{}'.format(self.username)
+    def __str__(self):
+        return self.staffname
 
+class StaffAssignment(models.Model):
+    staff_member = models.ForeignKey(staff, on_delete=models.CASCADE)
+    customer = models.ForeignKey(customer, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = "Staff Assignments"
+
+    def __str__(self):
+        return '{} assigned to {}'.format(self.customer.username, self.staff_member.staffname)
+    
 
 class car(models.Model):
     name = models.CharField(max_length=50)

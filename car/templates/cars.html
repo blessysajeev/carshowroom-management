@@ -115,18 +115,20 @@
         
         <div class="container">
             <div class="slide-container">
+                {% for i in sp %}
                 <div class="card-wrapper">
                     <div class="card">
                         <div class="image-box">
-                            <img src="{% static 'img/fog-light.webp' %}" alt="">
+                            <img src="{{i.image.url}}" alt="">
                         </div>
                         <div class="details">
                             <h3 class="name">ventilated seats</h3>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
 
-                <div class="card-wrapper">
+                <!-- <div class="card-wrapper">
                     <div class="card">
                         <div class="image-box">
                             <img src="{% static 'img/fog-light.webp' %}" alt="">
@@ -179,7 +181,7 @@
                             <h3 class="name">ventilated seats</h3>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         
@@ -209,7 +211,7 @@
 							<li><i class="icon-ok"></i> Spark plug cleaning</li>
 						</ul>
 					</div>
-					<div class="pricing-action">
+		`````````````			<div class="pricing-action">
 						<a href="#" class="btn btn-medium btn-theme"><i class="icon-bolt"></i> Book Now</a>
                         <a href="#" class="btn btn-medium btn-theme"><i class="icon-bolt"></i> EMI Calculate</a>
 

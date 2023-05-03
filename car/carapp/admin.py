@@ -2,8 +2,7 @@ from django.contrib import admin
 from email.headerregistry import Group
 from django.contrib import admin
 
-from.models import Vehicles,customer,staff,Bank,Productgallery,test_drive,showroom_visit,Payments
-from.models import Vehicles,customer,staff,Bank
+from.models import *
 from django.contrib.auth.models import Group,User
 
 # Register your models here.
@@ -38,8 +37,8 @@ admin.site.register(customer,customerAdmin)
 
 class test_driveAdmin(admin.ModelAdmin):
     list_display=['username','venue','carmodel','testdate','testtime']
-    def has_add_permission(self,request,obj= None):
-        return False
+    # def has_add_permission(self,request,obj= None):
+    #     return False
     def has_change_permission(self,request,obj= None):
         return False
     def has_delete_permission(self,request,obj= None):
@@ -59,7 +58,7 @@ class showroom_visitAdmin(admin.ModelAdmin):
 admin.site.register(showroom_visit,showroom_visitAdmin)
 
 class staffAdmin(admin.ModelAdmin):
-    list_display=['username','email','phone']
+    list_display=['staffname','email','phone']
 
     def has_add_permission(self, request, obj=None):
         return False
@@ -70,21 +69,12 @@ class staffAdmin(admin.ModelAdmin):
 
     verbose_name_plural = "Staff Details"
 
-    actions = ['assign_customers']
-
-    def assign_customers(self, request, queryset):
-        selected_staff = queryset.first()
-        customers = customer.objects.all()
-        for c in customers:
-            if not c.staff_assigned:
-                c.staff_assigned = selected_staff
-                c.save()
-        self.message_user(request, f'Successfully assigned customers to {selected_staff.username}')
-
-    assign_customers.short_description = "Assign selected staff to all unassigned customers"
-
 admin.site.register(staff,staffAdmin)
 
+class assignAdmin(admin.ModelAdmin):
+    list_display=['staff_member','customer']
+
+admin.site.register(StaffAssignment,assignAdmin)
 
 class BankAdmin(admin.ModelAdmin):
      list_display=['name','interest_rate']

@@ -23,6 +23,8 @@ urlpatterns = [
     path('staffhome',views.staffhome,name='staffhome'),
     path('stafflogin',views.stafflogin,name="stafflogin"),
     path('staffregister',views.staffregister,name="staffregister"),
+    # path('staff_assignments',views.staff_assignments,name="staff_assignments"),
+    path('customer_details/<int:id>', views.customer_details, name='customer_details'),
     path('showroomvisit',views.showroomvisit,name="showroomvisit"),
     path('job',views.job,name="job"),
     path('visit_delete/<int:id>',views.visit_delete,name='visit_delete'),
@@ -34,6 +36,7 @@ urlpatterns = [
     path('result', views.predict_price, name='result'),
     path('book/<int:id>',views.book,name='book'),
     path('paydone',views.paydone,name='paydone'),
+    path('profile/',views.profile,name='profile'),
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(), name='password_reset'),
