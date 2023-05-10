@@ -86,7 +86,7 @@ class PaymentAdmin(admin.ModelAdmin):
      list_display=['user','amount']
      
     # prepopulated_fields={'slug':('name',)}
-admin.site.register(Payments,PaymentAdmin)
+admin.site.register(Payment,PaymentAdmin)
 # class staffloginAdmin(admin.ModelAdmin):
 #     list_display=['username']
 #     exclude=('password',)

@@ -31,7 +31,12 @@ class Vehicles(models.Model):
     fueltype=models.TextField(blank=True)
     image = models.ImageField(upload_to='product',blank=True)
     banner = models.ImageField(upload_to='product',blank=True)
-    varient1=models.CharField(max_length=200,blank=True)
+    feature1=models.CharField(max_length=200,blank=True)
+    feature2=models.CharField(max_length=200,blank=True)
+    feature3=models.CharField(max_length=200,blank=True)
+    feature4=models.CharField(max_length=200,blank=True)
+    feature5=models.CharField(max_length=200,blank=True)
+    feature6=models.CharField(max_length=200,blank=True)
     brochure=models.FileField(upload_to='product',blank=True)
     # stock=models.CharField(max_length=250,default="null")
     available=models.BooleanField(default=True)
@@ -49,6 +54,7 @@ class Vehicles(models.Model):
 class Productgallery(models.Model):
     product=models.ForeignKey(Vehicles, default=None, on_delete=models.CASCADE)
     image=models.ImageField(upload_to='products', max_length=255)
+    feature=models.CharField(max_length=200,blank=True)
 
     def __str__(self):
         return self.product.name
@@ -145,8 +151,8 @@ class CarLoan(models.Model):
     loan_tenure = models.IntegerField()
     interest_rate = models.FloatField()
     emi_amount = models.FloatField()
-
-class Payments(models.Model):
+    
+class Payment(models.Model):
     user = models.ForeignKey(customer, on_delete=models.CASCADE,null=True)
     # name = models.CharField(max_length=100)
     amount = models.CharField(max_length=100)
@@ -155,6 +161,11 @@ class Payments(models.Model):
     razorpay_payment_id = models.CharField(max_length=100, blank=True,null=True)
     paid = models.BooleanField(default=False)  
     
+class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    booking_date = models.DateTimeField(auto_now_add=True)
+
 # class MyAccountManager(BaseUserManager):
 #     def create_user(self,username,phonenumber,email,password=None):
         

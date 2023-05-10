@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth.models import User,auth
@@ -106,10 +107,7 @@ def change_password(request):
             return redirect('change_password')
     return render(request, 'change/change_password.html')
 
-@login_required
-def profile(request,id):
-    profiles = customer.object.get(id=id)
-    return render(request, 'profile.html', {'profiles': profiles})
+
 
 def testdrive(request):  
     obj={}
@@ -146,10 +144,15 @@ def testdrive(request):
         messages.success(request, "book appoinment successfully.")
     return render(request,'testdrive.html',context)
 
+@login_required
+def profile(request):
+    profiles = customer.objects.filter(username=request.user)
+    return render(request, 'profile.html', {'profiles': profiles})
+
 def testview(request):
     print(request.user.id)
-    obj=test_drive.objects.get(username=request.user.id)
-    obje=showroom_visit.objects.get(username=request.user.id)
+    obj=test_drive.objects.filter(username=request.user.id)
+    obje=showroom_visit.objects.filter(username=request.user.id)
     print(obj,obje)
     # context={'info':obj}
     return render(request,'testview.html',{'obj':obj,'obje':obje})
@@ -195,13 +198,21 @@ def book(request,id=None):
 
     order_status = order['status']
     if order_status == 'created':
-        payment = Payments(
-            # user = customer.objects.get(id=request.user.id),
+        payment = Payment(
+            user = customer.objects.get(username=request.user),
             amount = amount,
             razorpay_order_id=order_id,
             razorpay_payment_status=order_status,
         )
         payment.save()
+
+        booking= Booking(
+            user = customer.objects.get(username=request.user),
+            amount = amount,
+            booking_date=timezone.now(),
+        )
+
+        booking.save()
 
         context = {
                 'order_id': order_id,
@@ -351,8 +362,8 @@ def customer_details(request,id):
 
     # Get the customer's bookings and appointments
     # bookings = Booking.objects.filter(customer=customer_obj)
-    # appointments = test_drive.objects.filter(customer=customer_obj)
-    # appointments = showroom_visit.objects.filter(customer=customer_obj)
+    appointments = test_drive.objects.filter(customer=customer_obj)
+    appointments = showroom_visit.objects.filter(customer=customer_obj)
 
 
     context = {
@@ -406,9 +417,7 @@ def predict(request):
         'year':data['year'],
         'fuel_type':data['fuel_type']
     }
-    
-        
-    
+
     return render(request, 'predict.html',context)
 
 def predict_price(request):
@@ -416,15 +425,10 @@ def predict_price(request):
     model = pickle.load(open('LinearRegressionModel.pkl', 'rb'))
     # Load the cleaned car data
     car = pd.read_csv('Cleaned_Car_data.csv')
-    
-
-
     # Get unique values of company and name columns
     companies = car['company'].unique()
     names = car['name'].unique()
     fuel_type = car['fuel_type'].unique()
-
-    
     # Get the form data
     if request.method=='POST':
         company = request.POST['company']
@@ -432,13 +436,9 @@ def predict_price(request):
         year = int(request.POST['year'])
         fuel_type = request.POST['fuel_type']
         kms_driven = int(request.POST['kms_driven'])
-        
-
     # Make a prediction using the model
-        prediction = model.predict(pd.DataFrame
-        (columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
-        data=[[car_model, company, year, kms_driven, fuel_type]]))
-    
+        prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
+                                                data=[[car_model, company, year, kms_driven, fuel_type]]))
      # Pass the context variables to the HTML template
         context = {
         'companies': companies,
@@ -447,7 +447,6 @@ def predict_price(request):
         'prediction': round(prediction[0], 2),
         'cols':car.columns
     }
-
     # Return the prediction as a JSON response
         return render(request, 'result.html', context)
 
