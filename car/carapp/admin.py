@@ -71,6 +71,10 @@ class staffAdmin(admin.ModelAdmin):
 
 admin.site.register(staff,staffAdmin)
 
+
+admin.site.register(LeaveApplication)
+
+
 class assignAdmin(admin.ModelAdmin):
     list_display=['staff_member','customer']
 

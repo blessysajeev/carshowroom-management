@@ -1,5 +1,9 @@
+from audioop import reverse
 from datetime import timezone
-from django.shortcuts import render,redirect
+from io import BytesIO
+from msilib.schema import File
+import os
+from django.shortcuts import get_object_or_404, render,redirect
 from .models import *
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
@@ -14,6 +18,8 @@ import numpy as np
 from django.http import JsonResponse
 import razorpay
 from django.conf import settings
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 # Create your views here.
 
@@ -206,60 +212,63 @@ def book(request,id=None):
         )
         payment.save()
 
-        booking= Booking(
-            user = customer.objects.get(username=request.user),
-            amount = amount,
-            booking_date=timezone.now(),
-        )
+        # booking= Booking(
+        #     user = customer.objects.get(username=request.user),
+        #     amount = amount,
+        #     booking_date=timezone.now(),
+        # )
 
-        booking.save()
+        # booking.save()  
+
+        
 
         context = {
                 'order_id': order_id,
                 'amount': amount,
                 'currency': 'INR',
                 'lst':lst,
-                'down_payment': down_payment
+                'down_payment': down_payment,
+                'invoice_id': payment.id,
             }
-        print(context)
+        
+        html_string = render_to_string('invoice.html', context)
+        
+        file_path = os.path.join(settings.MEDIA_ROOT, 'invoices', f'{payment.id}.pdf')
+        with open(file_path, 'w+b') as pdf_file:
+            pdf = pisa.pisaDocument(BytesIO(html_string.encode("UTF-8")), pdf_file)
+            if not pdf.err:
+                # Set the invoice URL in the payment model
+                payment.invoice_url = file_path
+                payment.save()
+
+        # success_msg = f"Payment successful! <a href='{reverse('download_invoice', args=(payment.id,))}'>Download your invoice here</a>."
+
+        # messages.success(request, success_msg)
+    #     return redirect('index')
+
+    # error_msg = "Payment unsuccessful. Please try again."
+    # messages.error(request, error_msg)
 
 
     return render(request, 'book.html', context)
+@login_required
+def download_invoice(id):
+    try:
+        payment = Payment.objects.get(id=id)
+        file_path = payment.invoice_url
+        with open(file_path, 'rb') as pdf_file:
+            response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename=invoice_{id}.pdf'
+            return response
+    except Payment.DoesNotExist:
+        pass
+
+    # If the payment or invoice file doesn't exist, return a 404 error
+    response = HttpResponse(status=404)
+    return response
     
 def paydone(request):
     return render(request,'pymentdone.html')
-
-
-# # Check if the down payment amount is valid (i.e., greater than or equal to 20000)
-        # if down_payment < 20000:
-        #     context['error'] = "Minimum down payment amount is 20000"
-        # else:
-        #     # TODO: Process payment using a payment gateway, such as Razorpay
-        #     context['success'] = True
-
-
-# def booking(request):
-#     if request.method == 'POST':
-#         # get the amount from the form
-#         down_payment = request.POST.get('down_payment')
-#         print(down_payment)
-#         amount_in_paise = max(int(down_payment) * 100, 100) # convert down payment to paise and ensure minimum value of 100 paise
-
-#         # create a Razorpay client and generate a payment order
-#         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-#         order = client.order.create({
-#             'amount': amount_in_paise,
-#             'currency': 'INR',
-#             'payment_capture': '1'
-#         })
-
-#         # render the payment form with the order details
-#         return render(request, 'book.html', {'order_id': order['id'], 'amount': amount_in_paise})
-
-#     else:
-#         # render the initial form with the list of products
-#         lst = [{'name': 'Product1', 'exshowroomprice': '100000'}, {'name': 'Product2', 'exshowroomprice': '200000'}, {'name': 'Product3', 'exshowroomprice': '300000'}]
-#         return render(request, 'book.html', {'lst': lst})
 
 
 def stafflogin(request):
@@ -302,7 +311,7 @@ def staffregister(request):
             else:
                 user=User.objects.create_user(username=username,email=email,password=password)
                 user.save();
-                u=staff(username=username,email=email,phone=phone,password=password)
+                u=staff(staffname=username,email=email,phone=phone,password=password)
                 u.save();
             print("User Created");
             messages.success(request,"successfully registered")
@@ -358,12 +367,13 @@ def visit_delete(request,id):
 def customer_details(request,id):
     # Get the currently logged-in customer
     # username = request.session.get('username')
-    customer_obj = customer.objects.get(id=id)
+    customer_obj = get_object_or_404(customer, id=id)
+    # appointments=test_drive.objects.get(id=id)
 
     # Get the customer's bookings and appointments
     # bookings = Booking.objects.filter(customer=customer_obj)
-    appointments = test_drive.objects.filter(customer=customer_obj)
-    appointments = showroom_visit.objects.filter(customer=customer_obj)
+    # appointments = test_drive.objects.filter(customer=customer_obj)
+    # appointments = showroom_visit.objects.filter(customer=customer_obj)
 
 
     context = {
@@ -374,6 +384,24 @@ def customer_details(request,id):
 
     return render(request, 'customer_details.html', context)
 
+@login_required
+def apply_leave(request):
+    if request.method == 'POST':
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        reason = request.POST['reason']
+
+        LeaveApplication.objects.create(staff=request.user, start_date=start_date, end_date=end_date, reason=reason)
+        return redirect('staffhome')
+
+    return render(request, 'apply_leave.html')
+
+def leavestatus(request):
+    leave_applications = LeaveApplication.objects.filter(staff=request.user)
+    context = {
+        'leave_applications': leave_applications
+    }
+    return render(request, 'leavestatus.html', context)
 
 def job(request):
     return render(request,'job.html')

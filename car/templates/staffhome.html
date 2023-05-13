@@ -38,7 +38,9 @@
                 <div class="navbar-collapse collapse ">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="{% url 'staffhome' %}">Home</a></li> 
-                        <li><a href="{% url 'job' %}">My shedule</a></li>
+                        <li><a href="{% url 'apply_leave' %}">Apply Leave</a></li>
+                        <li><a href="{% url 'leavestatus' %}">Leave Status</a></li>
+
 						
                         
                         
@@ -95,8 +97,10 @@
       <thead>
         <tr>
           <th>Slno</th>
-          <th>Customer</th>
-          <th>Actions</th>
+          <th>Customer Name</th>
+          <th>Customer Email</th>
+          <th>Customer Phone</th>
+          <!-- <th>Actions</th> -->
         </tr>
       </thead>
       <tbody>
@@ -104,9 +108,11 @@
           <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ assignment.customer.username }}</td>
-            <td>
+            <td>{{ assignment.customer.email }}</td>
+            <td>{{ assignment.customer.phone }}</td>
+            <!-- <td>
               <a href="{% url 'customer_details' assignment.id %}" class="btn btn-sm btn-danger">View Details</a>
-            </td>
+            </td> -->
           </tr>
         {% endfor %}
       </tbody>

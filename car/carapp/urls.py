@@ -37,6 +37,10 @@ urlpatterns = [
     path('book/<int:id>',views.book,name='book'),
     path('paydone',views.paydone,name='paydone'),
     path('profile',views.profile,name='profile'),
+    path('download_invoice/<int:id>', views.download_invoice, name='download_invoice'),
+    path('apply_leave/', views.apply_leave, name='apply_leave'),
+    path('leavestatus/', views.leavestatus, name='leavestatus'),
+
 
 
     path('password_reset/',auth_views.PasswordResetView.as_view(), name='password_reset'),
